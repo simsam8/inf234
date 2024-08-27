@@ -1,3 +1,5 @@
+import random
+
 """
 Input Sets H and S, Size of H==S
     and list of preferences
@@ -22,13 +24,6 @@ while some hospital is unmatched
         s rejects h # do nothing
 """
 
-hosp = {"h1", "h2"}
-stud = {"s1", "s2"}
-
-prefs_hosp = {"h1": ["s1", "s2"], "h2": ["s1", "s2"]}
-
-prefs_stud = {"s1": ["h1", "h2"], "s2": ["h1", "h2"]}
-
 
 def stable_matching(
     hospitals: set, students: set, prefs_hospitals: dict, prefs_students: dict
@@ -51,5 +46,30 @@ def stable_matching(
     return matched
 
 
-matchings = stable_matching(hosp, stud, prefs_hosp, prefs_stud)
-print(matchings)
+def main():
+    n_pairs = 10
+    hospitals = {f"h{n}" for n in range(n_pairs)}
+    students = {f"s{n}" for n in range(n_pairs)}
+    hospital_prefs = {
+        hospital: random.sample(sorted(students), n_pairs) for hospital in hospitals
+    }
+    student_prefs = {
+        student: random.sample(sorted(hospitals), n_pairs) for student in students
+    }
+
+    print("\nHospital preferences:")
+    for hosp, prefs in hospital_prefs.items():
+        print(f"{hosp}: {prefs}")
+
+    print("\nStudent preferences:")
+    for stud, prefs in student_prefs.items():
+        print(f"{stud}: {prefs}")
+
+    matchings = stable_matching(hospitals, students, hospital_prefs, student_prefs)
+    print("\nOutput:")
+    for h, s in matchings.items():
+        print(f"{h}:{s}")
+
+
+if __name__ == "__main__":
+    main()
